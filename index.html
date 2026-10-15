@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Cuerpo Humano - Spanish Body Parts Practice Test</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .card-flip {
+            perspective: 1000px;
+        }
+        .card-flip-inner {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .card-flip.flipped .card-flip-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+        .pulse-subtle {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .tab-view {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Navigation Bar -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-child-reaching text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-200">
+                        El Cuerpo Humano
+                    </h1>
+                    <p class="text-xs text-slate-400 font-medium">Interactive Audio Practice Test & Studio</p>
+                </div>
+            </div>
+
+            <!-- Stats Header -->
+            <div class="flex items-center space-x-4 text-xs font-semibold flex-wrap gap-y-2">
+                <div class="bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60 flex items-center space-x-2">
+                    <i class="fa-solid fa-award text-amber-400 text-sm"></i>
+                    <span>Score: <span id="headerScore" class="text-amber-400 font-bold">0</span></span>
+                </div>
+                <div class="bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60 flex items-center space-x-2">
+                    <i class="fa-solid fa-fire text-orange-500 text-sm"></i>
+                    <span>Streak: <span id="headerStreak" class="text-orange-400 font-bold">0</span></span>
+                </div>
+                <div class="bg-slate-800/80 px-3 py-1.5 rounded-lg border border-slate-700/60 flex items-center space-x-2">
+                    <i class="fa-solid fa-check-double text-emerald-400 text-sm"></i>
+                    <span>Learned: <span id="headerLearned" class="text-emerald-400 font-bold">0</span>/59</span>
+                </div>
+                <!-- Add Export Button -->
+                <button onclick="exportToGoogleSheets()" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded-lg border border-emerald-500/60 flex items-center space-x-2 transition-colors cursor-pointer text-white">
+                    <i class="fa-solid fa-file-excel"></i>
+                    <span>Save to Sheets</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-800/80">
+            <nav class="flex space-x-1 sm:space-x-2 overflow-x-auto py-2 no-scrollbar text-sm font-medium" id="mainTabs">
+                <button onclick="switchTab('vocab')" id="tab-vocab" class="nav-tab active text-blue-400 bg-slate-800 px-3.5 py-2 rounded-lg flex items-center space-x-2 whitespace-nowrap transition-all">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Vocabulary List (59)</span>
+                </button>
+                <button onclick="switchTab('flashcards')" id="tab-flashcards" class="nav-tab text-slate-400 hover:text-white px-3.5 py-2 rounded-lg flex items-center space-x-2 whitespace-nowrap transition-all">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Audio Flashcards</span>
+                </button>
+                <button onclick="switchTab('quiz')" id="tab-quiz" class="nav-tab text-slate-400 hover:text-white px-3.5 py-2 rounded-lg flex items-center space-x-2 whitespace-nowrap transition-all">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Practice Test</span>
+                </button>
+                <button onclick="switchTab('meduele')" id="tab-meduele" class="nav-tab text-slate-400 hover:text-white px-3.5 py-2 rounded-lg flex items-center space-x-2 whitespace-nowrap transition-all">
+                    <i class="fa-solid fa-stethoscope"></i>
+                    <span>"Me Duele" Doctor Lab</span>
+                </button>
+                <button onclick="switchTab('anatomy')" id="tab-anatomy" class="nav-tab text-slate-400 hover:text-white px-3.5 py-2 rounded-lg flex items-center space-x-2 whitespace-nowrap transition-all">
+                    <i class="fa-solid fa-street-view"></i>
+                    <span>Body Explorer</span>
+                </button>
+                <button onclick="switchTab('speech')" id="tab-speech" class="nav-tab text-slate-400 hover:text-white px-3.5 py-2 rounded-lg flex items-center space-x-2 whitespace-nowrap transition-all">
+                    <i class="fa-solid fa-microphone"></i>
+                    <span>Speech Lab</span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full">
+
+        <!-- TAB 1: VOCABULARY DICTIONARY -->
+        <section id="view-vocab" class="tab-view space-y-6">
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <span>El Cuerpo Humano Master List</span>
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-700">59 Terms</span>
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-0.5">Click any speaker icon to hear authentic native pronunciation. Search and filter by category.</p>
+                </div>
+                
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                    <!-- Search input -->
+                    <div class="relative flex-1 md:w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                        <input type="text" id="vocabSearch" oninput="filterVocab()" placeholder="Search Spanish or English..." 
+                            class="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all">
+                    </div>
+                    
+                    <!-- Filter category -->
+                    <select id="vocabFilter" onchange="filterVocab()" class="py-2 pl-3 pr-8 text-sm bg-slate-50 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="all">All Categories</option>
+                        <option value="head">Head & Face</option>
+                        <option value="upper_body">Arms & Hands</option>
+                        <option value="torso">Torso & Back</option>
+                        <option value="lower_body">Legs & Feet</option>
+                        <option value="internal">Internal Organs & Bones</option>
+                        <option value="general">General Body</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Vocabulary Cards Grid -->
+            <div id="vocabGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <!-- Dynamically populated -->
+            </div>
+        </section>
+
+        <!-- TAB 2: FLASHCARDS -->
+        <section id="view-flashcards" class="tab-view hidden space-y-6">
+            <div class="max-w-xl mx-auto space-y-6">
+                <!-- Control Bar -->
+                <div class="flex items-center justify-between text-sm">
+                    <span class="font-semibold text-slate-600">Card <span id="cardIndex">1</span> of <span id="cardTotal">59</span></span>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="shuffleFlashcards()" class="px-3 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-all flex items-center space-x-1">
+                            <i class="fa-solid fa-shuffle"></i>
+                            <span>Shuffle</span>
+                        </button>
+                        <button onclick="resetFlashcards()" class="px-3 py-1.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition-all flex items-center space-x-1">
+                            <i class="fa-solid fa-rotate"></i>
+                            <span>Reset</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interactive Flip Card -->
+                <div id="flashcardElement" class="card-flip w-full h-80 cursor-pointer select-none" onclick="toggleCardFlip()">
+                    <div class="card-flip-inner relative w-full h-full rounded-3xl shadow-xl bg-white border border-slate-200">
+                        <!-- Front (Spanish) -->
+                        <div class="card-front absolute inset-0 rounded-3xl p-8 flex flex-col justify-between items-center text-center bg-gradient-to-br from-slate-900 to-indigo-950 text-white">
+                            <div class="w-full flex justify-between items-center text-xs font-medium text-slate-400">
+                                <span id="cardCategoryBadge" class="bg-indigo-900/60 border border-indigo-700/50 px-3 py-1 rounded-full text-indigo-300">Category</span>
+                                <span class="text-slate-400"><i class="fa-solid fa-repeat mr-1"></i> Click to flip</span>
+                            </div>
+
+                            <div class="space-y-3 my-auto">
+                                <p id="cardArticle" class="text-2xl font-bold text-blue-400">la</p>
+                                <h3 id="cardSpanish" class="text-4xl font-extrabold tracking-tight text-white">cabeza</h3>
+                                <p id="cardPhonetic" class="text-xs text-slate-400 italic">kah-BEH-sah</p>
+                            </div>
+
+                            <div class="w-full flex justify-center items-center">
+                                <button onclick="event.stopPropagation(); playCurrentCardAudio();" class="w-12 h-12 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-500/30 transition-transform active:scale-95">
+                                    <i class="fa-solid fa-volume-high text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Back (English & Details) -->
+                        <div class="card-back absolute inset-0 rounded-3xl p-8 flex flex-col justify-between items-center text-center bg-white text-slate-900 border-2 border-indigo-100">
+                            <div class="w-full flex justify-between items-center text-xs font-semibold text-slate-400">
+                                <span>ENGLISH TRANSLATION</span>
+                                <span class="text-slate-400"><i class="fa-solid fa-repeat mr-1"></i> Click to flip</span>
+                            </div>
+
+                            <div class="space-y-3 my-auto">
+                                <h4 id="cardEnglish" class="text-3xl font-extrabold text-slate-900">head</h4>
+                                <div id="cardGrammarNote" class="p-3 bg-blue-50 border border-blue-100 rounded-xl text-xs text-blue-900 font-medium">
+                                    Feminine noun
+                                </div>
+                            </div>
+
+                            <div class="w-full text-xs text-slate-400">
+                                Practice saying: <span id="cardSampleSentence" class="text-slate-700 font-semibold">"Me duele la cabeza"</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Controls -->
+                <div class="grid grid-cols-2 gap-4">
+                    <button onclick="nextCard(false)" class="py-3 px-4 bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 font-bold rounded-2xl flex items-center justify-center space-x-2 transition-all">
+                        <i class="fa-solid fa-xmark"></i>
+                        <span>Need Review</span>
+                    </button>
+                    <button onclick="nextCard(true)" class="py-3 px-4 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-700 font-bold rounded-2xl flex items-center justify-center space-x-2 transition-all">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Mastered</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: PRACTICE QUIZ -->
+        <section id="view-quiz" class="tab-view hidden space-y-6">
+            <div class="max-w-2xl mx-auto space-y-6">
+                <!-- Quiz Config Header -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-900">Practice Quiz Module</h3>
+                            <p class="text-xs text-slate-500">Test translation, audio comprehension, and articles</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <select id="quizType" onchange="startNewQuiz()" class="py-1.5 px-3 text-xs font-semibold bg-slate-100 border border-slate-300 rounded-xl">
+                            <option value="es_en">Spanish ➔ English</option>
+                            <option value="en_es">English ➔ Spanish</option>
+                            <option value="audio">Audio Listening Quiz</option>
+                            <option value="article">Article Picker (El/La/Las)</option>
+                        </select>
+                        <button onclick="startNewQuiz()" class="px-3 py-1.5 text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-sm">
+                            New Quiz
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quiz Card Container -->
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-lg border border-slate-200/80 space-y-6 relative overflow-hidden">
+                    <div class="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        <span>Question <span id="quizQuestionNum">1</span>/10</span>
+                        <span id="quizScoreBadge" class="text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">Score: 0/0</span>
+                    </div>
+
+                    <!-- Question Prompt Area -->
+                    <div class="text-center py-6 space-y-4">
+                        <div id="quizPromptSubtitle" class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Translate this term</div>
+                        
+                        <div class="flex items-center justify-center space-x-3">
+                            <h2 id="quizQuestionText" class="text-3xl md:text-4xl font-extrabold text-slate-900">la cabeza</h2>
+                            <button id="quizAudioBtn" onclick="playQuizQuestionAudio()" class="w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 flex items-center justify-center transition-all">
+                                <i class="fa-solid fa-volume-high text-base"></i>
+                            </button>
+                        </div>
+
+                        <p id="quizHintText" class="text-xs text-slate-400 italic">Listen closely to the Spanish audio!</p>
+                    </div>
+
+                    <!-- Multiple Choice Options -->
+                    <div id="quizOptionsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Options generated dynamically -->
+                    </div>
+
+                    <!-- Feedback Alert -->
+                    <div id="quizFeedback" class="hidden p-4 rounded-2xl text-center text-sm font-semibold transition-all">
+                        <!-- Feedback content -->
+                    </div>
+
+                    <!-- Next Question Button -->
+                    <div class="flex justify-end pt-2">
+                        <button id="quizNextBtn" onclick="nextQuizQuestion()" disabled class="px-6 py-3 bg-slate-900 hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl transition-all flex items-center space-x-2">
+                            <span>Next Question</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: ME DUELE / ME DUELEN LAB -->
+        <section id="view-meduele" class="tab-view hidden space-y-6">
+            <div class="max-w-3xl mx-auto space-y-6">
+                <!-- Grammar Explanation Banner -->
+                <div class="bg-gradient-to-r from-emerald-900 via-teal-900 to-slate-900 rounded-3xl p-6 md:p-8 text-white shadow-xl space-y-4 border border-emerald-700/40">
+                    <div class="flex items-center space-x-3 text-emerald-400 font-bold text-sm tracking-wider uppercase">
+                        <i class="fa-solid fa-hand-holding-medical text-lg"></i>
+                        <span>Essential Spanish Grammar Rule</span>
+                    </div>
+
+                    <h2 class="text-2xl md:text-3xl font-extrabold">Expressing Pain: "Me duele" vs "Me duelen"</h2>
+                    <p class="text-sm text-slate-200 leading-relaxed">
+                        In Spanish, you don't say <em class="text-emerald-300">"My head hurts"</em> directly. Instead, you say <em class="text-emerald-300">"To me, the head is painful"</em>.
+                        Because the body part is the subject of the sentence, the verb matches whether the body part is singular or plural!
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div class="bg-emerald-950/80 border border-emerald-600/40 rounded-2xl p-4 space-y-1">
+                            <div class="text-xs font-bold text-emerald-400 uppercase">1. Singular Nouns</div>
+                            <div class="text-lg font-bold text-white">Me duele + singular noun</div>
+                            <p class="text-xs text-slate-300">Examples: <em>Me duele la cabeza</em> (My head hurts), <em>Me duele el brazo</em> (My arm hurts).</p>
+                        </div>
+                        <div class="bg-emerald-950/80 border border-emerald-600/40 rounded-2xl p-4 space-y-1">
+                            <div class="text-xs font-bold text-teal-400 uppercase">2. Plural Nouns</div>
+                            <div class="text-lg font-bold text-white">Me duelen + plural noun</div>
+                            <p class="text-xs text-slate-300">Examples: <em>Me duelen las amígdalas</em> (My tonsils hurt), <em>Me duelen las pecas</em> (My freckles hurt).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Doctor Simulator Drill -->
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-200 space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <h3 class="text-lg font-bold text-slate-900 flex items-center space-x-2">
+                            <i class="fa-solid fa-stethoscope text-emerald-600"></i>
+                            <span>Doctor's Office Practice Drill</span>
+                        </h3>
+                        <span id="medueleScoreBadge" class="text-xs font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">Score: 0</span>
+                    </div>
+
+                    <div class="text-center py-4 space-y-3">
+                        <span id="medueleTargetEnglish" class="text-xs font-bold tracking-wider text-slate-400 uppercase">How do you say?</span>
+                        <h2 id="meduelePrompt" class="text-2xl md:text-3xl font-extrabold text-slate-800">"My tonsils hurt"</h2>
+                        <div id="medueleBodyPartHint" class="text-sm font-semibold text-blue-600">(Body Part: las amígdalas)</div>
+                    </div>
+
+                    <!-- Choice Buttons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="checkMeDueleChoice('Me duele')" class="p-4 bg-slate-50 hover:bg-emerald-50 border-2 border-slate-200 hover:border-emerald-500 rounded-2xl font-bold text-slate-800 hover:text-emerald-900 transition-all text-left flex items-center justify-between group">
+                            <div>
+                                <div class="text-base">Me duele...</div>
+                                <div class="text-xs text-slate-500 group-hover:text-emerald-700 font-normal">Use for singular body parts</div>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-slate-400 group-hover:text-emerald-600"></i>
+                        </button>
+
+                        <button onclick="checkMeDueleChoice('Me duelen')" class="p-4 bg-slate-50 hover:bg-teal-50 border-2 border-slate-200 hover:border-teal-500 rounded-2xl font-bold text-slate-800 hover:text-teal-900 transition-all text-left flex items-center justify-between group">
+                            <div>
+                                <div class="text-base">Me duelen...</div>
+                                <div class="text-xs text-slate-500 group-hover:text-teal-700 font-normal">Use for plural body parts</div>
+                            </div>
+                            <i class="fa-solid fa-chevron-right text-slate-400 group-hover:text-teal-600"></i>
+                        </button>
+                    </div>
+
+                    <!-- Feedback Box -->
+                    <div id="medueleFeedback" class="hidden p-4 rounded-2xl text-center text-sm font-semibold space-y-2">
+                        <!-- Dynamic feedback -->
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button id="medueleNextBtn" onclick="nextMeDueleQuestion()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm rounded-xl transition-all flex items-center space-x-2 opacity-50 cursor-not-allowed" disabled>
+                            <span>Next Drill</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: BODY EXPLORER DIAGRAM -->
+        <section id="view-anatomy" class="tab-view hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-slate-200/80 space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Interactive Body Map Explorer</h2>
+                    <p class="text-sm text-slate-500">Click on any body region pin to highlight Spanish vocabulary and play audio.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                    <!-- SVG Interactive Human Silhouette Map -->
+                    <div class="lg:col-span-5 bg-slate-900 rounded-3xl p-6 flex justify-center items-center relative min-h-[420px] shadow-inner">
+                        <svg viewBox="0 0 300 500" class="w-full max-w-[280px] h-auto text-slate-700">
+                            <!-- Body Silhouette -->
+                            <!-- Head & Neck -->
+                            <circle cx="150" cy="50" r="32" fill="currentColor" class="hover:text-slate-600 transition-colors" />
+                            <rect x="142" y="80" width="16" height="25" rx="4" fill="currentColor" />
+                            
+                            <!-- Torso -->
+                            <path d="M110,105 L190,105 L180,260 L120,260 Z" fill="currentColor" />
+                            
+                            <!-- Arms -->
+                            <path d="M105,108 L75,200 L88,205 L112,120 Z" fill="currentColor" />
+                            <path d="M195,108 L225,200 L212,205 L188,120 Z" fill="currentColor" />
+                            <!-- Hands -->
+                            <circle cx="70" cy="215" r="10" fill="currentColor" />
+                            <circle cx="230" cy="215" r="10" fill="currentColor" />
+
+                            <!-- Legs -->
+                            <path d="M122,260 L115,410 L135,410 L145,260 Z" fill="currentColor" />
+                            <path d="M178,260 L185,410 L165,410 L155,260 Z" fill="currentColor" />
+                            <!-- Feet -->
+                            <ellipse cx="120" cy="420" rx="15" ry="8" fill="currentColor" />
+                            <ellipse cx="180" cy="420" rx="15" ry="8" fill="currentColor" />
+
+                            <!-- Interactive Clickable Pins -->
+                            <!-- Head Pin -->
+                            <g onclick="selectAnatomyPin('head')" class="cursor-pointer group">
+                                <circle cx="150" cy="40" r="10" class="fill-blue-500 group-hover:fill-blue-400 transition-all stroke-2 stroke-white" />
+                                <circle cx="150" cy="40" r="16" class="fill-blue-500/30 animate-ping" />
+                            </g>
+                            <!-- Face/Nose Pin -->
+                            <g onclick="selectAnatomyPin('head')" class="cursor-pointer group">
+                                <circle cx="150" cy="58" r="8" class="fill-emerald-500 group-hover:fill-emerald-400 transition-all stroke-2 stroke-white" />
+                            </g>
+                            <!-- Chest/Torso Pin -->
+                            <g onclick="selectAnatomyPin('torso')" class="cursor-pointer group">
+                                <circle cx="150" cy="140" r="10" class="fill-amber-500 group-hover:fill-amber-400 transition-all stroke-2 stroke-white" />
+                            </g>
+                            <!-- Arm Pin -->
+                            <g onclick="selectAnatomyPin('upper_body')" class="cursor-pointer group">
+                                <circle cx="90" cy="150" r="9" class="fill-purple-500 group-hover:fill-purple-400 transition-all stroke-2 stroke-white" />
+                            </g>
+                            <!-- Internal Organs Pin -->
+                            <g onclick="selectAnatomyPin('internal')" class="cursor-pointer group">
+                                <circle cx="150" cy="190" r="9" class="fill-rose-500 group-hover:fill-rose-400 transition-all stroke-2 stroke-white" />
+                            </g>
+                            <!-- Legs Pin -->
+                            <g onclick="selectAnatomyPin('lower_body')" class="cursor-pointer group">
+                                <circle cx="130" cy="330" r="10" class="fill-cyan-500 group-hover:fill-cyan-400 transition-all stroke-2 stroke-white" />
+                            </g>
+                        </svg>
+                    </div>
+
+                    <!-- Region Vocabulary Detail List -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                            <div>
+                                <span class="text-xs font-bold uppercase text-slate-400">Active Region</span>
+                                <h3 id="anatomyRegionTitle" class="text-xl font-bold text-slate-900">Head & Face</h3>
+                            </div>
+                            <span id="anatomyTermCount" class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-bold rounded-full">-- Terms</span>
+                        </div>
+
+                        <div id="anatomyTermsContainer" class="max-h-[350px] overflow-y-auto space-y-2 pr-2">
+                            <!-- Populated dynamically -->
+                            <p class="text-sm text-slate-500 text-center py-4">Select a pin on the body diagram to view terminology.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: SPEECH RECOGNITION LAB -->
+        <section id="view-speech" class="tab-view hidden space-y-6">
+            <div class="max-w-xl mx-auto space-y-6">
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border border-slate-200/80 text-center space-y-6">
+                    <div class="w-16 h-16 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-2xl mx-auto flex items-center justify-center text-white text-2xl shadow-lg shadow-blue-500/20">
+                        <i class="fa-solid fa-microphone"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Pronunciation Studio</h2>
+                        <p class="text-sm text-slate-500 mt-1">Speak Spanish into your microphone to verify your pronunciation precision!</p>
+                    </div>
+                    
+                    <div class="bg-slate-50 border border-slate-200 p-6 rounded-2xl">
+                        <p class="text-xs uppercase text-slate-400 font-bold mb-2">Target Word</p>
+                        <h3 id="speechTargetWord" class="text-3xl font-bold text-slate-800">la cabeza</h3>
+                        <p id="speechTargetEnglish" class="text-sm text-slate-500 mb-4">head</p>
+                        <button onclick="playSpeechTargetAudio()" class="w-10 h-10 rounded-full bg-blue-100 hover:bg-blue-200 text-blue-700 flex items-center justify-center mx-auto transition-all">
+                            <i class="fa-solid fa-volume-high text-base"></i>
+                        </button>
+                    </div>
+
+                    <button id="micBtn" onclick="startSpeechRecognition()" class="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl transition-all shadow-md flex justify-center items-center gap-3">
+                        <i class="fa-solid fa-microphone"></i>
+                        <span>Start Recording</span>
+                    </button>
+
+                    <div id="speechResultArea" class="hidden p-4 rounded-xl border-2 text-center font-medium">
+                    </div>
+                    
+                    <button onclick="nextSpeechWord()" class="text-sm text-blue-600 font-bold hover:underline">Skip to next word</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- 1. APPLICATION DATA & STATE ---
+        const vocabData = [
+            { id: 1, article: 'la', es: 'cabeza', en: 'head', cat: 'head', phonetic: 'kah-BEH-sah' },
+            { id: 2, article: 'el', es: 'pelo', en: 'hair', cat: 'head', phonetic: 'PEH-loh' },
+            { id: 3, article: 'la', es: 'cara', en: 'face', cat: 'head', phonetic: 'KAH-rah' },
+            { id: 4, article: 'el', es: 'ojo', en: 'eye', cat: 'head', phonetic: 'OH-hoh' },
+            { id: 5, article: 'la', es: 'ceja', en: 'eyebrow', cat: 'head', phonetic: 'SEH-hah' },
+            { id: 6, article: 'la', es: 'oreja', en: 'ear (outer)', cat: 'head', phonetic: 'oh-REH-hah' },
+            { id: 7, article: 'la', es: 'nariz', en: 'nose', cat: 'head', phonetic: 'nah-REES' },
+            { id: 8, article: 'la', es: 'boca', en: 'mouth', cat: 'head', phonetic: 'BOH-kah' },
+            { id: 9, article: 'el', es: 'labio', en: 'lip', cat: 'head', phonetic: 'LAH-byoh' },
+            { id: 10, article: 'el', es: 'diente', en: 'tooth', cat: 'head', phonetic: 'DYEN-teh' },
+            { id: 11, article: 'la', es: 'lengua', en: 'tongue', cat: 'head', phonetic: 'LENG-gwah' },
+            { id: 12, article: 'el', es: 'cuello', en: 'neck', cat: 'torso', phonetic: 'KWEH-yoh' },
+            { id: 13, article: 'la', es: 'garganta', en: 'throat', cat: 'torso', phonetic: 'gahr-GAHN-tah' },
+            { id: 14, article: 'el', es: 'hombro', en: 'shoulder', cat: 'upper_body', phonetic: 'OHM-broh' },
+            { id: 15, article: 'el', es: 'brazo', en: 'arm', cat: 'upper_body', phonetic: 'BRAH-soh' },
+            { id: 16, article: 'el', es: 'codo', en: 'elbow', cat: 'upper_body', phonetic: 'KOH-doh' },
+            { id: 17, article: 'la', es: 'muñeca', en: 'wrist', cat: 'upper_body', phonetic: 'moo-NYEH-kah' },
+            { id: 18, article: 'la', es: 'mano', en: 'hand', cat: 'upper_body', phonetic: 'MAH-noh' },
+            { id: 19, article: 'el', es: 'dedo', en: 'finger', cat: 'upper_body', phonetic: 'DEH-doh' },
+            { id: 20, article: 'la', es: 'uña', en: 'nail', cat: 'upper_body', phonetic: 'OO-nyah' },
+            { id: 21, article: 'el', es: 'pecho', en: 'chest', cat: 'torso', phonetic: 'PEH-choh' },
+            { id: 22, article: 'el', es: 'corazón', en: 'heart', cat: 'internal', phonetic: 'koh-rah-SOHN' },
+            { id: 23, article: 'el', es: 'estómago', en: 'stomach', cat: 'internal', phonetic: 'ehs-TOH-mah-goh' },
+            { id: 24, article: 'la', es: 'barriga', en: 'belly', cat: 'torso', phonetic: 'bah-RREE-gah' },
+            { id: 25, article: 'la', es: 'espalda', en: 'back', cat: 'torso', phonetic: 'ehs-PAHL-dah' },
+            { id: 26, article: 'la', es: 'cintura', en: 'waist', cat: 'torso', phonetic: 'seen-TOO-rah' },
+            { id: 27, article: 'la', es: 'pierna', en: 'leg', cat: 'lower_body', phonetic: 'PYEHR-nah' },
+            { id: 28, article: 'la', es: 'rodilla', en: 'knee', cat: 'lower_body', phonetic: 'roh-DEE-yah' },
+            { id: 29, article: 'el', es: 'tobillo', en: 'ankle', cat: 'lower_body', phonetic: 'toh-BEE-yoh' },
+            { id: 30, article: 'el', es: 'pie', en: 'foot', cat: 'lower_body', phonetic: 'PYEH' },
+            { id: 31, article: 'el', es: 'dedo del pie', en: 'toe', cat: 'lower_body', phonetic: 'DEH-doh dehl PYEH' },
+            { id: 32, article: 'la', es: 'piel', en: 'skin', cat: 'general', phonetic: 'PYEHL' },
+            { id: 33, article: 'el', es: 'hueso', en: 'bone', cat: 'internal', phonetic: 'WEH-soh' },
+            { id: 34, article: 'la', es: 'sangre', en: 'blood', cat: 'internal', phonetic: 'SAHN-greh' },
+            { id: 35, article: 'el', es: 'cerebro', en: 'brain', cat: 'internal', phonetic: 'seh-REH-broh' },
+            { id: 36, article: 'el', es: 'pulmón', en: 'lung', cat: 'internal', phonetic: 'pool-MOHN' },
+            { id: 37, article: 'el', es: 'hígado', en: 'liver', cat: 'internal', phonetic: 'EE-gah-doh' },
+            { id: 38, article: 'el', es: 'músculo', en: 'muscle', cat: 'general', phonetic: 'MOOS-koo-loh' },
+            { id: 39, article: 'la', es: 'vena', en: 'vein', cat: 'internal', phonetic: 'BEH-nah' },
+            { id: 40, article: 'el', es: 'cráneo', en: 'skull', cat: 'internal', phonetic: 'KRAH-neh-oh' },
+            { id: 41, article: 'la', es: 'costilla', en: 'rib', cat: 'internal', phonetic: 'kohs-TEE-yah' },
+            { id: 42, article: 'el', es: 'intestino', en: 'intestine', cat: 'internal', phonetic: 'een-tehs-TEE-noh' },
+            { id: 43, article: 'las', es: 'amígdalas', en: 'tonsils', cat: 'head', phonetic: 'ah-MEEG-dah-lahs' },
+            { id: 44, article: 'la', es: 'barbilla', en: 'chin', cat: 'head', phonetic: 'bahr-BEE-yah' },
+            { id: 45, article: 'la', es: 'mejilla', en: 'cheek', cat: 'head', phonetic: 'meh-HEE-yah' },
+            { id: 46, article: 'la', es: 'frente', en: 'forehead', cat: 'head', phonetic: 'FREN-teh' },
+            { id: 47, article: 'la', es: 'mandíbula', en: 'jaw', cat: 'head', phonetic: 'mahn-DEE-boo-lah' },
+            { id: 48, article: 'la', es: 'saliva', en: 'saliva', cat: 'head', phonetic: 'sah-LEE-bah' },
+            { id: 49, article: 'el', es: 'sudor', en: 'sweat', cat: 'general', phonetic: 'soo-DOHR' },
+            { id: 50, article: 'las', es: 'pecas', en: 'freckles', cat: 'head', phonetic: 'PEH-kahs' },
+            { id: 51, article: 'el', es: 'talón', en: 'heel', cat: 'lower_body', phonetic: 'tah-LOHN' },
+            { id: 52, article: 'el', es: 'muslo', en: 'thigh', cat: 'lower_body', phonetic: 'MOOS-loh' },
+            { id: 53, article: 'la', es: 'cadera', en: 'hip', cat: 'torso', phonetic: 'kah-DEH-rah' },
+            { id: 54, article: 'el', es: 'ombligo', en: 'belly button', cat: 'torso', phonetic: 'ohm-BLEE-goh' },
+            { id: 55, article: 'el', es: 'vello', en: 'body hair', cat: 'general', phonetic: 'BEH-yoh' },
+            { id: 56, article: 'la', es: 'articulación', en: 'joint', cat: 'general', phonetic: 'ahr-tee-koo-lah-SYOHN' },
+            { id: 57, article: 'la', es: 'pestaña', en: 'eyelash', cat: 'head', phonetic: 'pehs-TAH-nyah' },
+            { id: 58, article: 'el', es: 'riñón', en: 'kidney', cat: 'internal', phonetic: 'ree-NYOHN' },
+            { id: 59, article: 'la', es: 'columna', en: 'spine', cat: 'internal', phonetic: 'koh-LOOM-nah' }
+        ];
+
+        let state = {
+            score: 0,
+            streak: 0,
+            learnedIds: new Set(),
+            flashcardIndex: 0,
+            flashcardList: [...vocabData],
+            quizQuestions: [],
+            quizIndex: 0,
+            quizScore: 0,
+            medueleScore: 0,
+            medueleCurrent: null,
+            speechTarget: null
+        };
+
+        // Initialize App
+        window.onload = function() {
+            renderVocab();
+            initFlashcards();
+            initSpeech();
+            document.getElementById('headerLearned').innerText = state.learnedIds.size;
+        };
+
+        // --- 2. GLOBAL UTILITIES & TABS ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-tab').forEach(el => {
+                el.classList.remove('text-blue-400', 'bg-slate-800', 'active');
+                el.classList.add('text-slate-400');
+            });
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            activeTab.classList.remove('text-slate-400');
+            activeTab.classList.add('text-blue-400', 'bg-slate-800', 'active');
+
+            if(tabId === 'quiz') startNewQuiz();
+            if(tabId === 'meduele') nextMeDueleQuestion();
+        }
+
+        function playAudio(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'es-ES'; // Spanish pronunciation
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function updateStats(scoreInc = 0, streakReset = false) {
+            state.score += scoreInc;
+            if(streakReset) state.streak = 0;
+            else if(scoreInc > 0) state.streak++;
+            
+            document.getElementById('headerScore').innerText = state.score;
+            document.getElementById('headerStreak').innerText = state.streak;
+            document.getElementById('headerLearned').innerText = state.learnedIds.size;
+        }
+
+        // --- 3. VOCABULARY TAB LOGIC ---
+        function renderVocab(filterText = '', filterCat = 'all') {
+            const grid = document.getElementById('vocabGrid');
+            grid.innerHTML = '';
+            
+            const filtered = vocabData.filter(word => {
+                const textMatch = word.es.toLowerCase().includes(filterText.toLowerCase()) || 
+                                  word.en.toLowerCase().includes(filterText.toLowerCase());
+                const catMatch = filterCat === 'all' || word.cat === filterCat;
+                return textMatch && catMatch;
+            });
+
+            filtered.forEach(word => {
+                const isLearned = state.learnedIds.has(word.id);
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-xl border ${isLearned ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-200'} shadow-sm flex items-center justify-between group`;
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-baseline space-x-1">
+                            <span class="text-xs font-bold text-slate-400">${word.article}</span>
+                            <span class="text-lg font-bold text-slate-800">${word.es}</span>
+                        </div>
+                        <div class="text-sm text-slate-500">${word.en}</div>
+                    </div>
+                    <button onclick="playAudio('${word.article} ${word.es}')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-blue-100 text-slate-400 hover:text-blue-600 flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterVocab() {
+            const text = document.getElementById('vocabSearch').value;
+            const cat = document.getElementById('vocabFilter').value;
+            renderVocab(text, cat);
+        }
+
+        // --- 4. FLASHCARDS TAB LOGIC ---
+        function initFlashcards() {
+            updateFlashcardUI();
+        }
+
+        function shuffleFlashcards() {
+            state.flashcardList.sort(() => Math.random() - 0.5);
+            state.flashcardIndex = 0;
+            updateFlashcardUI();
+        }
+
+        function resetFlashcards() {
+            state.flashcardList = [...vocabData];
+            state.flashcardIndex = 0;
+            updateFlashcardUI();
+        }
+
+        function toggleCardFlip() {
+            document.getElementById('flashcardElement').classList.toggle('flipped');
+        }
+
+        function playCurrentCardAudio() {
+            const word = state.flashcardList[state.flashcardIndex];
+            playAudio(`${word.article} ${word.es}`);
+        }
+
+        function updateFlashcardUI() {
+            if (state.flashcardIndex >= state.flashcardList.length) state.flashcardIndex = 0;
+            const word = state.flashcardList[state.flashcardIndex];
+            
+            document.getElementById('cardIndex').innerText = state.flashcardIndex + 1;
+            document.getElementById('cardArticle').innerText = word.article;
+            document.getElementById('cardSpanish').innerText = word.es;
+            document.getElementById('cardPhonetic').innerText = word.phonetic;
+            document.getElementById('cardEnglish').innerText = word.en;
+            
+            let gender = word.article === 'el' || word.article === 'los' ? 'Masculine' : 'Feminine';
+            let number = word.article === 'los' || word.article === 'las' ? 'plural' : 'singular';
+            document.getElementById('cardGrammarNote').innerText = `${gender} ${number} noun`;
+            
+            const verb = (word.article === 'los' || word.article === 'las') ? 'duelen' : 'duele';
+            document.getElementById('cardSampleSentence').innerText = `"Me ${verb} ${word.article} ${word.es}"`;
+            
+            const cats = { head: "Head & Face", upper_body: "Arms & Hands", torso: "Torso & Back", lower_body: "Legs & Feet", internal: "Internal Organs", general: "General" };
+            document.getElementById('cardCategoryBadge').innerText = cats[word.cat] || 'General';
+
+            document.getElementById('flashcardElement').classList.remove('flipped');
+        }
+
+        function nextCard(mastered) {
+            const currentWord = state.flashcardList[state.flashcardIndex];
+            if (mastered) {
+                state.learnedIds.add(currentWord.id);
+                updateStats(5, false); // +5 points for mastering
+                renderVocab(); // update vocab list styling
+            }
+            state.flashcardIndex++;
+            updateFlashcardUI();
+        }
+
+        // --- 5. QUIZ TAB LOGIC ---
+        function startNewQuiz() {
+            const type = document.getElementById('quizType').value;
+            state.quizQuestions = [];
+            state.quizIndex = 0;
+            state.quizScore = 0;
+            
+            // Generate 10 random questions
+            let pool = [...vocabData].sort(() => 0.5 - Math.random()).slice(0, 10);
+            
+            pool.forEach(word => {
+                let options = [];
+                let answer = "";
+                let prompt = "";
+                let sub = "";
+                
+                if (type === 'es_en') {
+                    answer = word.en;
+                    prompt = `${word.article} ${word.es}`;
+                    sub = "Translate to English";
+                    options = [...vocabData].filter(w => w.id !== word.id).sort(() => 0.5 - Math.random()).slice(0, 3).map(w => w.en);
+                } else if (type === 'en_es') {
+                    answer = `${word.article} ${word.es}`;
+                    prompt = word.en;
+                    sub = "Translate to Spanish";
+                    options = [...vocabData].filter(w => w.id !== word.id).sort(() => 0.5 - Math.random()).slice(0, 3).map(w => `${w.article} ${w.es}`);
+                } else if (type === 'audio') {
+                    answer = word.en;
+                    prompt = "🔊 Click Audio";
+                    sub = "Listen and translate";
+                    options = [...vocabData].filter(w => w.id !== word.id).sort(() => 0.5 - Math.random()).slice(0, 3).map(w => w.en);
+                } else if (type === 'article') {
+                    answer = word.article;
+                    prompt = `___ ${word.es} (${word.en})`;
+                    sub = "Choose the correct article";
+                    options = ['el', 'la', 'los', 'las'].filter(a => a !== word.article).slice(0, 3);
+                }
+                
+                options.push(answer);
+                options.sort(() => 0.5 - Math.random()); // Shuffle options
+                
+                state.quizQuestions.push({ word, prompt, sub, answer, options, type });
+            });
+            
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            if (state.quizIndex >= state.quizQuestions.length) {
+                document.getElementById('quizPromptSubtitle').innerText = "Quiz Complete!";
+                document.getElementById('quizQuestionText').innerText = `Final Score: ${state.quizScore}/10`;
+                document.getElementById('quizOptionsGrid').innerHTML = '';
+                document.getElementById('quizAudioBtn').classList.add('hidden');
+                document.getElementById('quizHintText').innerText = "Select New Quiz to play again.";
+                document.getElementById('quizNextBtn').disabled = true;
+                return;
+            }
+
+            const q = state.quizQuestions[state.quizIndex];
+            document.getElementById('quizQuestionNum').innerText = state.quizIndex + 1;
+            document.getElementById('quizScoreBadge').innerText = `Score: ${state.quizScore}/${state.quizQuestions.length}`;
+            
+            document.getElementById('quizPromptSubtitle').innerText = q.sub;
+            document.getElementById('quizQuestionText').innerText = q.prompt;
+            
+            const audioBtn = document.getElementById('quizAudioBtn');
+            if(q.type === 'en_es' || q.type === 'article') {
+                audioBtn.classList.add('hidden');
+            } else {
+                audioBtn.classList.remove('hidden');
+                if (q.type === 'audio') playQuizQuestionAudio();
+            }
+
+            const grid = document.getElementById('quizOptionsGrid');
+            grid.innerHTML = '';
+            
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'p-4 bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 rounded-xl font-bold text-slate-700 transition-all text-left';
+                btn.innerText = opt;
+                btn.onclick = () => handleQuizAnswer(opt, btn);
+                grid.appendChild(btn);
+            });
+            
+            const feedback = document.getElementById('quizFeedback');
+            feedback.className = 'hidden p-4 rounded-2xl text-center text-sm font-semibold transition-all';
+            document.getElementById('quizNextBtn').disabled = true;
+        }
+
+        function playQuizQuestionAudio() {
+            const q = state.quizQuestions[state.quizIndex];
+            playAudio(`${q.word.article} ${q.word.es}`);
+        }
+
+        function handleQuizAnswer(selected, btnEl) {
+            const q = state.quizQuestions[state.quizIndex];
+            const feedback = document.getElementById('quizFeedback');
+            const btns = document.getElementById('quizOptionsGrid').children;
+            
+            // Disable all buttons
+            for(let btn of btns) btn.disabled = true;
+            
+            if (selected === q.answer) {
+                btnEl.classList.remove('bg-slate-50', 'border-slate-200');
+                btnEl.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-800');
+                feedback.className = 'p-4 rounded-2xl text-center text-sm font-bold bg-emerald-50 text-emerald-700 border border-emerald-200';
+                feedback.innerHTML = '<i class="fa-solid fa-check-circle mr-2"></i> ¡Excelente! Correct.';
+                state.quizScore++;
+                updateStats(10, false);
+            } else {
+                btnEl.classList.remove('bg-slate-50', 'border-slate-200');
+                btnEl.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-800');
+                // Highlight correct answer
+                for(let btn of btns) {
+                    if (btn.innerText === q.answer) {
+                        btn.classList.add('bg-emerald-50', 'border-emerald-400');
+                    }
+                }
+                feedback.className = 'p-4 rounded-2xl text-center text-sm font-bold bg-rose-50 text-rose-700 border border-rose-200';
+                feedback.innerHTML = `<i class="fa-solid fa-xmark-circle mr-2"></i> Incorrect. The answer is <strong>${q.answer}</strong>.`;
+                updateStats(0, true);
+            }
+            
+            document.getElementById('quizScoreBadge').innerText = `Score: ${state.quizScore}/${state.quizQuestions.length}`;
+            document.getElementById('quizNextBtn').disabled = false;
+        }
+
+        function nextQuizQuestion() {
+            state.quizIndex++;
+            renderQuizQuestion();
+        }
+
+        // --- 6. ME DUELE LAB LOGIC ---
+        function nextMeDueleQuestion() {
+            const randomWord = vocabData[Math.floor(Math.random() * vocabData.length)];
+            state.medueleCurrent = randomWord;
+            
+            document.getElementById('meduelePrompt').innerText = `"My ${randomWord.en} hurts"`;
+            document.getElementById('medueleBodyPartHint').innerText = `(Body Part: ${randomWord.article} ${randomWord.es})`;
+            
+            document.getElementById('medueleFeedback').classList.add('hidden');
+            document.getElementById('medueleNextBtn').disabled = true;
+            document.getElementById('medueleNextBtn').classList.add('opacity-50', 'cursor-not-allowed');
+        }
+
+        function checkMeDueleChoice(choice) {
+            if (!state.medueleCurrent) return;
+            const word = state.medueleCurrent;
+            const isPlural = word.article === 'los' || word.article === 'las';
+            const correctAnswer = isPlural ? 'Me duelen' : 'Me duele';
+            
+            const feedback = document.getElementById('medueleFeedback');
+            feedback.classList.remove('hidden');
+            
+            if (choice === correctAnswer) {
+                feedback.className = 'p-4 rounded-2xl text-center text-sm font-semibold space-y-2 bg-emerald-50 text-emerald-800 border border-emerald-200';
+                feedback.innerHTML = `
+                    <div class="text-lg font-bold"><i class="fa-solid fa-check"></i> Correct!</div>
+                    <div class="italic">"${correctAnswer} ${word.article} ${word.es}"</div>
+                `;
+                playAudio(`${correctAnswer} ${word.article} ${word.es}`);
+                state.medueleScore++;
+                updateStats(5, false);
+            } else {
+                feedback.className = 'p-4 rounded-2xl text-center text-sm font-semibold space-y-2 bg-rose-50 text-rose-800 border border-rose-200';
+                feedback.innerHTML = `
+                    <div class="text-lg font-bold"><i class="fa-solid fa-xmark"></i> Not quite.</div>
+                    <div>Because <strong>${word.article} ${word.es}</strong> is ${isPlural ? 'plural' : 'singular'}, you must use <strong>${correctAnswer}</strong>.</div>
+                `;
+                updateStats(0, true);
+            }
+            
+            document.getElementById('medueleScoreBadge').innerText = `Score: ${state.medueleScore}`;
+            
+            const nextBtn = document.getElementById('medueleNextBtn');
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        // --- 7. ANATOMY EXPLORER LOGIC ---
+        function selectAnatomyPin(category) {
+            const catMap = {
+                'head': 'Head & Face',
+                'upper_body': 'Arms & Hands',
+                'torso': 'Torso & Back',
+                'lower_body': 'Legs & Feet',
+                'internal': 'Internal Organs'
+            };
+            
+            document.getElementById('anatomyRegionTitle').innerText = catMap[category] || 'General';
+            
+            const regionWords = vocabData.filter(w => w.cat === category);
+            document.getElementById('anatomyTermCount').innerText = `${regionWords.length} Terms`;
+            
+            const container = document.getElementById('anatomyTermsContainer');
+            container.innerHTML = '';
+            
+            regionWords.forEach(word => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl hover:border-blue-200 transition-colors cursor-pointer group';
+                row.onclick = () => playAudio(`${word.article} ${word.es}`);
+                row.innerHTML = `
+                    <div>
+                        <span class="font-bold text-slate-800 mr-2">${word.article} ${word.es}</span>
+                        <span class="text-xs text-slate-500">${word.en}</span>
+                    </div>
+                    <i class="fa-solid fa-volume-high text-slate-300 group-hover:text-blue-500"></i>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        // --- 8. SPEECH RECOGNITION LAB LOGIC ---
+        function initSpeech() {
+            nextSpeechWord();
+        }
+
+        function nextSpeechWord() {
+            state.speechTarget = vocabData[Math.floor(Math.random() * vocabData.length)];
+            document.getElementById('speechTargetWord').innerText = `${state.speechTarget.article} ${state.speechTarget.es}`;
+            document.getElementById('speechTargetEnglish').innerText = state.speechTarget.en;
+            document.getElementById('speechResultArea').classList.add('hidden');
+        }
+
+        function playSpeechTargetAudio() {
+            if(state.speechTarget) {
+                playAudio(`${state.speechTarget.article} ${state.speechTarget.es}`);
+            }
+        }
+
+        function startSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const resultArea = document.getElementById('speechResultArea');
+            const micBtn = document.getElementById('micBtn');
+
+            if (!SpeechRecognition) {
+                resultArea.classList.remove('hidden');
+                resultArea.className = 'p-4 rounded-xl border-2 text-center font-medium bg-rose-50 text-rose-700 border-rose-200';
+                resultArea.innerText = "Speech recognition is not supported in this browser. Try Chrome or Edge.";
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'es-ES';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = function() {
+                micBtn.innerHTML = '<i class="fa-solid fa-microphone-lines animate-pulse text-red-500"></i><span> Listening...</span>';
+                micBtn.classList.replace('bg-slate-900', 'bg-slate-100');
+                micBtn.classList.replace('text-white', 'text-slate-900');
+            };
+
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript.toLowerCase().trim();
+                const targetText = (`${state.speechTarget.article} ${state.speechTarget.es}`).toLowerCase().trim();
+                const targetTextNoArticle = state.speechTarget.es.toLowerCase().trim();
+                
+                resultArea.classList.remove('hidden');
+                
+                // Allow matches with or without the article
+                if (speechResult.includes(targetText) || speechResult.includes(targetTextNoArticle)) {
+                    resultArea.className = 'p-4 rounded-xl border-2 text-center font-bold bg-emerald-50 text-emerald-700 border-emerald-200';
+                    resultArea.innerHTML = `You said: "${speechResult}" <br><span class="text-sm font-normal mt-1 block">Perfect pronunciation!</span>`;
+                    updateStats(15, false);
+                    setTimeout(nextSpeechWord, 2500);
+                } else {
+                    resultArea.className = 'p-4 rounded-xl border-2 text-center font-bold bg-amber-50 text-amber-700 border-amber-200';
+                    resultArea.innerHTML = `You said: "${speechResult}" <br><span class="text-sm font-normal mt-1 block">Keep practicing. Listen to the audio and try again.</span>`;
+                }
+            };
+
+            recognition.onerror = function(event) {
+                resultArea.classList.remove('hidden');
+                resultArea.className = 'p-4 rounded-xl border-2 text-center font-medium bg-rose-50 text-rose-700 border-rose-200';
+                resultArea.innerText = `Error: ${event.error}. Please check your microphone permissions.`;
+            };
+
+            recognition.onend = function() {
+                micBtn.innerHTML = '<i class="fa-solid fa-microphone"></i><span> Start Recording</span>';
+                micBtn.classList.replace('bg-slate-100', 'bg-slate-900');
+                micBtn.classList.replace('text-slate-900', 'text-white');
+            };
+
+            recognition.start();
+        }
+
+        // --- 9. GOOGLE SHEETS / DATA EXPORT LOGIC ---
+        function exportToGoogleSheets() {
+            // Note: Directly writing to Google Sheets from a static frontend requires an active 
+            // Google Apps Script Web App (Webhook) deployment. Because this environment cannot 
+            // access your personal Google Drive, this generates a formatted CSV file that you 
+            // can upload/import directly into Google Sheets.
+            
+            const dateStr = new Date().toLocaleDateString();
+            
+            // Calculate Learned Words details
+            const learnedWordsArray = Array.from(state.learnedIds).map(id => {
+                const word = vocabData.find(w => w.id === id);
+                return `${word.article} ${word.es} (${word.en})`;
+            });
+            const learnedWordsString = `"${learnedWordsArray.join(', ')}"`;
+
+            // Prepare CSV Data
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Date,Total Score,Current Streak,Words Learned Count,Learned Words List\r\n";
+            csvContent += `${dateStr},${state.score},${state.streak},${state.learnedIds.size},${learnedWordsString}\r\n`;
+
+            // Trigger Download
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Spanish_Practice_Results_${new Date().getTime()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // UI Feedback
+            const btn = document.querySelector('button[onclick="exportToGoogleSheets()"]');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check"></i><span>Saved!</span>';
+            btn.classList.add('bg-emerald-700');
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('bg-emerald-700');
+            }, 2000);
+            
+            /* 
+             * TO POST DIRECTLY TO A LIVE GOOGLE SHEET (Requires Apps Script Web App setup):
+             * 
+             * fetch("YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL", {
+             *     method: "POST",
+             *     mode: 'no-cors',
+             *     headers: { "Content-Type": "application/json" },
+             *     body: JSON.stringify({
+             *         score: state.score,
+             *         streak: state.streak,
+             *         learned: state.learnedIds.size
+             *     })
+             * });
+             */
+        }
+    </script>
+</body>
+</html>
